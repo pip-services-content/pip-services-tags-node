@@ -1,0 +1,98 @@
+{    
+    // "logs": {
+    //     "descriptor": {
+    //         "type": "null"
+    //     }
+    // },
+    "logs": {
+        "descriptor": {
+            "type": "console"
+        },
+        "options": {
+            "level": 10
+        }
+    },
+    
+    // "counters": {
+    //     "descriptor": {
+    //         "type": "null"
+    //     }
+    // },
+    "counters": {
+        "descriptor": {
+            "type": "log"
+        },
+        "options": {
+            "timeout": 10000
+        }
+    },
+    
+    "persistence": {
+        "descriptor": {
+            "group": "pip-services-tags",            
+            "type": "mongodb"
+        },
+        "connection": {
+            "uri": "mongodb://localhost/pipservicestest"
+        },
+        "options": {
+            "server": {
+                "poolSize": 4,
+                "socketOptions": {
+                    "keepAlive": 1,
+                    "connectTimeoutMS": 5000
+                },
+                "auto_reconnect": true
+            },
+            "debug": false        
+        }
+    },
+    // "persistence": {
+    //     "descriptor": {
+    //         "group": "pip-services-tags",            
+    //         "type": "file"
+    //     },
+    //     "options": {
+    //         "path": "./tags.json"
+    //     }
+    // },
+
+    "controllers": {
+        "descriptor": {
+            "group": "pip-services-tags"            
+        },
+        "options": {
+            "maxTagCount": 1000
+        }
+    },    
+    
+    "clients": [],
+    
+    "services": [
+        {
+            "descriptor": {
+                "group": "pip-services-tags",            
+                "type": "seneca",
+                "version": "1.0"
+            },
+            "endpoint": {
+                "type": "tcp",
+                "host": "localhost",
+                "port": 8812
+            }
+        },
+        {
+            "descriptor": {
+                "group": "pip-services-tags",            
+                "type": "rest",
+                "version": "1.0"
+            },
+            "endpoint": {
+                "type": "http",
+                "host": "localhost",
+                "port": 8012
+            }
+        }
+    ]
+    
+}
