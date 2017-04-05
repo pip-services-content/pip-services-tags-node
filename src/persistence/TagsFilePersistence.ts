@@ -1,61 +1,26 @@
-let _ = require('lodash');
+import { ConfigParams } from 'pip-services-commons-node';
+import { FilterParams } from 'pip-services-commons-node';
+import { PagingParams } from 'pip-services-commons-node';
+import { DataPage } from 'pip-services-commons-node';
+import { JsonFilePersister } from 'pip-services-data-node';
 
-import { Category } from 'pip-services-runtime-node';
-import { ComponentDescriptor } from 'pip-services-runtime-node';
-import { ComponentConfig } from 'pip-services-runtime-node';
-import { DynamicMap } from 'pip-services-runtime-node';
-import { FilePersistence } from 'pip-services-runtime-node';
-import { Converter } from 'pip-services-runtime-node';
-import { TagsProcessor } from 'pip-services-runtime-node';
-import { ITagsPersistence } from './ITagsPersistence';
-import { TagsDataConverter } from './TagsDataConverter';
+import { TagsMemoryPersistence } from './TagsMemoryPersistence';
+import { PartyTagsV1 } from '../data/version1/PartyTagsV1';
 
-export class TagsFilePersistence extends FilePersistence implements ITagsPersistence {
-	/**
-	 * Unique descriptor for the TagsFilePersistence component
-	 */
-	public static Descriptor: ComponentDescriptor = new ComponentDescriptor(
-		Category.Persistence, "pip-services-tags", "file", "*"
-	);
+export class TagsFilePersistence extends TagsMemoryPersistence {
+	protected _persister: JsonFilePersister<PartyTagsV1>;
 
-    constructor(descriptor?: ComponentDescriptor) {
-        super(descriptor || TagsFilePersistence.Descriptor);
+    public constructor(path?: string) {
+        super();
+
+        this._persister = new JsonFilePersister<PartyTagsV1>(path);
+        this._loader = this._persister;
+        this._saver = this._persister;
     }
 
-    public getTags(correlationId: string, partyId: string, callback) {
-        this.getById(partyId, (err, item) => {
-            let tagRecords = item ? item.tags : [];
-            tagRecords = tagRecords || [];  
-            callback(err, tagRecords);
-        });
-    }
-
-    public setTags(correlationId: string, partyId: string, tagRecords: any[], callback: any) {
-        tagRecords = TagsDataConverter.validateTags(tagRecords);
-
-        this.getById(partyId, (err, item) => {
-            if (err) {
-                callback(err, null);
-                return;
-            } 
-            
-            if (item == null) {
-                item = {
-                    id: partyId,
-                    tags: tagRecords,
-                    updated: new Date()
-                };               
-                this._items.push(item);
-            } else {
-                item.tags = tagRecords;
-                item.updated = new Date();
-            }
-                        
-            this.save((err) => {
-                 if (err) callback(err);
-                 else callback(null, tagRecords);
-            });
-        });
+    public configure(config: ConfigParams): void {
+        super.configure(config);
+        this._persister.configure(config);
     }
 
 }

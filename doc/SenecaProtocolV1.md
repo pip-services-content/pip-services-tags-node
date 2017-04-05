@@ -29,21 +29,31 @@ seneca.act(
 );
 ```
 
-* [Tag class](#class1)
+* [PartyTagsV1 class](#class1)
+* [TagRecordV1 class](#class2)
 * [cmd: 'get_tags'](#operation1)
 * [cmd: 'set_tags'](#operation2)
 * [cmd: 'record_tags'](#operation3)
 
 ## Data types
 
-### <a name="class1"></a> Tag class
+### <a name="class1"></a> PartyTagsV1 class
+
+Contains collection of all recorded tags used by a party
+
+**Properties:**
+- id: string - unique party id
+- tags: TagRecordV1[] - array with recorded tags
+- changed_time: Date - date and time when the tags where changed
+
+### <a name="class2"></a> TagRecordV1 class
 
 Represents a record of specific tag usage by the party
 
 **Properties:**
 - tag: string - a tag string
 - count: number - how manu times the tag was used
-- used: Date - date and time when the tag used for the last time
+- last_time: Date - date and time when the tag used for the last time
 
 ## Operations
 
@@ -56,19 +66,18 @@ Retrieves a tags usage history for specified party.
 
 **Returns:**
 - err: Error - occured error or null for success
-- result: [Tag] - history of tags used by the party
+- party_tags: PartyTagsV1 - object with party id and recorded tags
 
 ### <a name="operation2"></a> Cmd: 'set_tags'
 
 Sets tags usage history for the specified party
 
 **Arguments:** 
-- party_id: string - unique party id
-- tags: [Tag] - history of tags to be stored for the party
+- party_tags: PartyTagsV1 - object with party id and recorded tags
 
 **Returns:**
 - err: Error - occured error or null for success
-- result: [Tag] - updated history of tags used by the party
+- party_tags: PartyTagsV1 - object with party id and recorded tags
 
 ### <a name="operation3"></a> Cmd: 'record_tags'
 
@@ -80,4 +89,4 @@ Records single instance of tags usage and updates the tags history.
 
 **Returns:**
 - err: Error - occured error or null for success
-- result: [Tag] - updated history of tags used by the party
+- party_tags: PartyTagsV1 - object with party id and recorded tags

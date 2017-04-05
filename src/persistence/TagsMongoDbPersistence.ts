@@ -1,58 +1,30 @@
 let _ = require('lodash');
-let async = require('async');
 
-import { Category } from 'pip-services-runtime-node';
-import { ComponentDescriptor } from 'pip-services-runtime-node';
-import { ComponentConfig } from 'pip-services-runtime-node';
-import { MongoDbPersistence } from 'pip-services-runtime-node';
-import { TagsProcessor } from 'pip-services-runtime-node';
+import { FilterParams } from 'pip-services-commons-node';
+import { PagingParams } from 'pip-services-commons-node';
+import { DataPage } from 'pip-services-commons-node';
+import { IdentifiableMongoDbPersistence } from 'pip-services-data-node';
+
+import { PartyTagsV1 } from '../data/version1/PartyTagsV1';
 import { ITagsPersistence } from './ITagsPersistence';
-import { TagsDataConverter } from './TagsDataConverter';
+import {PartyTagsMongoDbSchema } from './PartyTagsMongoDbSchema';
 
-export class TagsMongoDbPersistence extends MongoDbPersistence implements ITagsPersistence {    
-	/**
-	 * Unique descriptor for the TagsMongoDbPersistence component
-	 */
-	public static Descriptor: ComponentDescriptor = new ComponentDescriptor(
-		Category.Persistence, "pip-services-tags", "mongodb", "*"
-	);
+export class TagsMongoDbPersistence 
+    extends IdentifiableMongoDbPersistence<PartyTagsV1, string> 
+    implements ITagsPersistence {
 
     constructor() {
-        super(TagsMongoDbPersistence.Descriptor, require('./TagsModel'));
-    }
-        
-    public getTags(correlationId: string, partyId: string, callback) {
-        this._model.findById(
-            partyId, 
-            (err, item) => {
-                let tagRecords = item ? item.tags : [];
-                tagRecords = _.map(tagRecords, (tag) => this.jsonToPublic(tag));
-                callback(err, tagRecords);
-            }
-        );
+        super('tags', PartyTagsMongoDbSchema());
     }
 
-    public setTags(correlationId: string, partyId: string, tagRecords: any[], callback) {
-        tagRecords = tagRecords || [];
-        
-        this._model.findByIdAndUpdate(
-            partyId,
-            {
-                $set: {
-                    tags: tagRecords,
-                    updated: new Date()
-                }
-            },
-            {
-                'new': true,
-                upsert: true
-            },
-            (err, item) => {
-                let tagRecords = item ? item.tags : []; 
-                tagRecords = _.map(tagRecords, (tag) => this.jsonToPublic(tag));
-                callback(err, tagRecords);
-            }
-        );
-    }
+    public set(correlationId: string, item: PartyTagsV1,
+        callback: (err: any, item: PartyTagsV1) => void): void {
+        if (item == null) {
+            if (callback) callback(null, null);
+            return;
+        }
 
+        item.change_time = new Date();
+        super.set(correlationId, item, callback);
+    }
 }

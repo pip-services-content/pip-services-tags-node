@@ -1,0 +1,19 @@
+- descriptor: "pip-services-container:container-info:default:default:1.0"
+  name: "pip-services-tags"
+  description: "Tags microservice"
+
+- descriptor: "pip-services-commons:logger:console:default:1.0"
+  level: "trace"
+
+- descriptor: "pip-services-tags:persistence:file:default:1.0"
+  path: "./data/tags.json"
+
+- descriptor: "pip-services-tags:controller:default:default:1.0"
+  options:
+    max_tag_count: 100
+
+- descriptor: "pip-services-tags:service:http:default:1.0"
+  connection:
+    protocol: "http"
+    host: "0.0.0.0"
+    port: 3000

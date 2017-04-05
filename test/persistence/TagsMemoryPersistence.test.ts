@@ -1,24 +1,19 @@
-import { ComponentSet } from 'pip-services-runtime-node';
-import { ComponentConfig } from 'pip-services-runtime-node';
-
 import { TagsMemoryPersistence } from '../../src/persistence/TagsMemoryPersistence';
 import { TagsPersistenceFixture } from './TagsPersistenceFixture';
 
 suite('TagsMemoryPersistence', ()=> {
-    let db, fixture;
+    let persistence: TagsMemoryPersistence;
+    let fixture: TagsPersistenceFixture;
     
     setup((done) => {
-        db = new TagsMemoryPersistence();
-        db.configure(new ComponentConfig());
-
-        fixture = new TagsPersistenceFixture(db);
+        persistence = new TagsMemoryPersistence();
+        fixture = new TagsPersistenceFixture(persistence);
         
-        db.link(new ComponentSet());
-        db.open(done);
+        persistence.open(null, done);
     });
     
     teardown((done) => {
-        db.close(done);
+        persistence.close(null, done);
     });
         
     test('Get and Set Tags', (done) => {

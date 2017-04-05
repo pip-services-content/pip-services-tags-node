@@ -1,29 +1,29 @@
 let _ = require('lodash');
 
-import { Category } from 'pip-services-runtime-node';
-import { ComponentDescriptor } from 'pip-services-runtime-node';
-import { ComponentConfig } from 'pip-services-runtime-node';
-import { TagsFilePersistence } from './TagsFilePersistence';
+import { FilterParams } from 'pip-services-commons-node';
+import { PagingParams } from 'pip-services-commons-node';
+import { DataPage } from 'pip-services-commons-node';
+import { IdentifiableMemoryPersistence } from 'pip-services-data-node';
+
+import { PartyTagsV1 } from '../data/version1/PartyTagsV1';
 import { ITagsPersistence } from './ITagsPersistence';
 
-export class TagsMemoryPersistence extends TagsFilePersistence implements ITagsPersistence {
-	/**
-	 * Unique descriptor for the TagsFilePersistence component
-	 */
-	public static Descriptor: ComponentDescriptor = new ComponentDescriptor(
-		Category.Persistence, "pip-services-tags", "memory", "*"
-	);
+export class TagsMemoryPersistence 
+    extends IdentifiableMemoryPersistence<PartyTagsV1, string> 
+    implements ITagsPersistence {
 
     constructor() {
-        super(TagsMemoryPersistence.Descriptor);
+        super();
     }
 
-    public configure(config: ComponentConfig): void {
-        super.configure(config.withDefaultTuples("options.path", ""));
-    }
+    public set(correlationId: string, item: PartyTagsV1,
+        callback: (err: any, item: PartyTagsV1) => void): void {
+        if (item == null) {
+            if (callback) callback(null, null);
+            return;
+        }
 
-    public save(callback: (err: any) => void): void {
-        // Skip saving data to disk
-        if (callback) callback(null);
+        item.change_time = new Date();
+        super.set(correlationId, item, callback);
     }
 }

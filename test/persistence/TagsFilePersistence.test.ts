@@ -1,43 +1,28 @@
-import { ComponentSet } from 'pip-services-runtime-node';
-import { ComponentConfig } from 'pip-services-runtime-node';
-import { DynamicMap } from 'pip-services-runtime-node';
+import { ConfigParams } from 'pip-services-commons-node';
 
 import { TagsFilePersistence } from '../../src/persistence/TagsFilePersistence';
 import { TagsPersistenceFixture } from './TagsPersistenceFixture';
 
-let config = ComponentConfig.fromValue({
-    descriptor: {
-        type: 'file'
-    },
-    options: {
-        path: './data/tags.test.json',
-        data: []
-    }
-});
-
 suite('TagsFilePersistence', ()=> {
-    let db, fixture;
+    let persistence: TagsFilePersistence;
+    let fixture: TagsPersistenceFixture;
     
-    suiteSetup((done) => {
-        db = new TagsFilePersistence();
-        db.configure(config);
-
-        fixture = new TagsPersistenceFixture(db);
-        
-        db.link(new ComponentSet());
-        db.open(done); 
-    });
-    
-    suiteTeardown((done) => {
-        db.close(done);
-    });
-
     setup((done) => {
-        db.clearTestData(done);
+        persistence = new TagsFilePersistence('./data/tags.test.json');
+
+        fixture = new TagsPersistenceFixture(persistence);
+        
+        persistence.open(null, (err) => {
+            if (err) done(err);
+            else persistence.clear(null, done);
+        });
+    });
+    
+    teardown((done) => {
+        persistence.close(null, done);
     });
         
     test('Get and Set Tags', (done) => {
         fixture.testGetAndSetTags(done);
     });
-
 });

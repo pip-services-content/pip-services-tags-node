@@ -1,10 +1,10 @@
-import { CommandSet } from 'pip-services-runtime-node';
-import { ICommand } from 'pip-services-runtime-node';
-import { Command } from 'pip-services-runtime-node';
-import { Schema } from 'pip-services-runtime-node';
-import { DynamicMap } from 'pip-services-runtime-node';
-import { FilterParams } from 'pip-services-runtime-node';
-import { PagingParams } from 'pip-services-runtime-node';
+import { CommandSet } from 'pip-services-commons-node';
+import { ICommand } from 'pip-services-commons-node';
+import { Command } from 'pip-services-commons-node';
+import { Schema } from 'pip-services-commons-node';
+import { Parameters } from 'pip-services-commons-node';
+import { FilterParams } from 'pip-services-commons-node';
+import { PagingParams } from 'pip-services-commons-node';
 
 import { ITagsBusinessLogic } from './ITagsBusinessLogic';
 
@@ -24,12 +24,10 @@ export class TagsCommandSet extends CommandSet {
 
 	private makeGetTagsCommand(): ICommand {
 		return new Command(
-			this._logic,
 			"get_tags",
-			new Schema()
-				.withProperty("party_id", "string"),
-            (correlationId: string, args: DynamicMap, callback: (err: any, result: any) => void) => {
-                let partyId = args.getNullableString("party_id");
+			null,
+            (correlationId: string, args: Parameters, callback: (err: any, result: any) => void) => {
+                let partyId = args.getAsNullableString("party_id");
                 this._logic.getTags(correlationId, partyId, callback);
             }
 		);
@@ -37,29 +35,22 @@ export class TagsCommandSet extends CommandSet {
 
 	private makeSetTagsCommand(): ICommand {
 		return new Command(
-			this._logic,
 			"set_tags",
-			new Schema()
-				.withProperty("party_id", "string")
-				.withProperty("tags", "array"),
-            (correlationId: string, args: DynamicMap, callback: (err: any, result: any) => void) => {
-                let partyId = args.getNullableString("party_id");
-                let tagRecords = args.getArray("tags");
-                this._logic.setTags(correlationId, partyId, tagRecords, callback);
+			null,
+            (correlationId: string, args: Parameters, callback: (err: any, result: any) => void) => {
+                let partyTags = args.get("party_tags");
+                this._logic.setTags(correlationId, partyTags, callback);
             }
 		);
 	}
 
 	private makeRecordTagsCommand(): ICommand {
 		return new Command(
-			this._logic,
 			"record_tags",
-			new Schema()
-				.withProperty("party_id", "string")
-				.withProperty("tags", "array"),
-            (correlationId: string, args: DynamicMap, callback: (err: any, result: any) => void) => {
-                let partyId = args.getNullableString("party_id");
-                let tags = args.getArray("tags");
+			null,
+            (correlationId: string, args: Parameters, callback: (err: any, result: any) => void) => {
+                let partyId = args.getAsNullableString("party_id");
+                let tags = args.getAsArray("tags");
                 this._logic.recordTags(correlationId, partyId, tags, callback);
             }
 		);

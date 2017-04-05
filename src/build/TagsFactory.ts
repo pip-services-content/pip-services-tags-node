@@ -1,25 +1,30 @@
-import { ComponentFactory } from 'pip-services-runtime-node';
-import { DefaultFactory } from 'pip-services-runtime-node';
+import { Factory } from 'pip-services-commons-node';
+import { Descriptor } from 'pip-services-commons-node';
 
 import { TagsMongoDbPersistence } from '../persistence/TagsMongoDbPersistence';
 import { TagsFilePersistence } from '../persistence/TagsFilePersistence';
 import { TagsMemoryPersistence } from '../persistence/TagsMemoryPersistence';
 import { TagsController } from '../logic/TagsController';
-import { TagsRestService } from '../services/version1/TagsRestService';
-import { TagsSenecaService } from '../services/version1/TagsSenecaService'; 
+import { TagsHttpServiceV1 } from '../services/version1/TagsHttpServiceV1';
+import { TagsSenecaServiceV1 } from '../services/version1/TagsSenecaServiceV1'; 
 
-export class TagsFactory extends ComponentFactory {
-	public static Instance: TagsFactory = new TagsFactory();
+export class TagsFactory extends Factory {
+	public static Descriptor = new Descriptor("pip-services-tags", "factory", "default", "default", "1.0");
+	public static MemoryPersistenceDescriptor = new Descriptor("pip-services-tags", "persistence", "memory", "*", "1.0");
+	public static FilePersistenceDescriptor = new Descriptor("pip-services-tags", "persistence", "file", "*", "1.0");
+	public static MongoDbPersistenceDescriptor = new Descriptor("pip-services-tags", "persistence", "mongodb", "*", "1.0");
+	public static ControllerDescriptor = new Descriptor("pip-services-tags", "controller", "default", "*", "1.0");
+	public static SenecaServiceDescriptor = new Descriptor("pip-services-tags", "service", "seneca", "*", "1.0");
+	public static HttpServiceDescriptor = new Descriptor("pip-services-tags", "service", "http", "*", "1.0");
 	
 	constructor() {
-		super(DefaultFactory.Instance);
-
-		this.register(TagsFilePersistence.Descriptor, TagsFilePersistence);
-		this.register(TagsMemoryPersistence.Descriptor, TagsMemoryPersistence);
-		this.register(TagsMongoDbPersistence.Descriptor, TagsMongoDbPersistence);
-		this.register(TagsController.Descriptor, TagsController);
-		this.register(TagsRestService.Descriptor, TagsRestService);
-		this.register(TagsSenecaService.Descriptor, TagsSenecaService);
+		super();
+		this.registerAsType(TagsFactory.MemoryPersistenceDescriptor, TagsMemoryPersistence);
+		this.registerAsType(TagsFactory.FilePersistenceDescriptor, TagsFilePersistence);
+		this.registerAsType(TagsFactory.MongoDbPersistenceDescriptor, TagsMongoDbPersistence);
+		this.registerAsType(TagsFactory.ControllerDescriptor, TagsController);
+		this.registerAsType(TagsFactory.SenecaServiceDescriptor, TagsSenecaServiceV1);
+		this.registerAsType(TagsFactory.HttpServiceDescriptor, TagsHttpServiceV1);
 	}
 	
 }

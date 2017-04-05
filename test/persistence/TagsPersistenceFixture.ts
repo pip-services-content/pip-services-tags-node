@@ -2,33 +2,37 @@ let async = require('async');
 let assert = require('chai').assert;
 
 import { ITagsPersistence } from '../../src/persistence/ITagsPersistence';
+import { PartyTagsV1 } from '../../src/data/version1/PartyTagsV1';
+import { TagRecordV1 } from '../../src/data/version1/TagRecordV1';
 
-let TAGS = [
-    { tag: 'tag1', count: 10, used: new Date() },
-    { tag: 'Tag 2', count: 3, used: new Date() },
-    { tag: 'TAG3', count: 4, used: new Date() }
-];
+let TAGS = new PartyTagsV1(
+    '1',
+    [
+        new TagRecordV1('tag1', 10),
+        new TagRecordV1('Tag 2', 3),
+        new TagRecordV1('TAG3', 4)
+    ]
+);
     
 export class TagsPersistenceFixture {
-    private _db: ITagsPersistence;
+    private _persistence: ITagsPersistence;
     
-    constructor(db) {
-        assert.isNotNull(db);
-        this._db = db;
+    constructor( persistence) {
+        assert.isNotNull( persistence);
+        this._persistence =  persistence;
     }
 
-    testGetAndSetTags(done) {
+    public testGetAndSetTags(done) {
         async.series([
         // Set party tags
             (callback) => {
-                this._db.setTags(
+                this._persistence.set(
                     null,
-                    '1',
                     TAGS,
-                    (err, tags) => {
+                    (err, partyTags) => {
                         assert.isNull(err);
 
-                        assert.lengthOf(tags, 3);
+                        assert.lengthOf(partyTags.tags, 3);
 
                         callback();
                     }
@@ -36,13 +40,13 @@ export class TagsPersistenceFixture {
             },
         // Read and check party tags
             (callback) => {
-                this._db.getTags(
+                this._persistence.getOneById(
                     null,
                     '1',
-                    (err, tags) => {
+                    (err, partyTags) => {
                         assert.isNull(err);
 
-                        assert.lengthOf(tags, 3);
+                        assert.lengthOf(partyTags.tags, 3);
 
                         callback();
                     }

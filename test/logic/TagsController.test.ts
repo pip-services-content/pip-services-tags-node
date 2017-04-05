@@ -2,52 +2,56 @@ let _ = require('lodash');
 let async = require('async');
 let assert = require('chai').assert;
 
-import { ComponentSet } from 'pip-services-runtime-node';
-import { ComponentConfig } from 'pip-services-runtime-node';
-import { LifeCycleManager } from 'pip-services-runtime-node';
+import { Descriptor } from 'pip-services-commons-node';
+import { ConfigParams } from 'pip-services-commons-node';
+import { References } from 'pip-services-commons-node';
+import { ConsoleLogger } from 'pip-services-commons-node';
 
+import { PartyTagsV1 } from '../../src/data/version1/PartyTagsV1';
+import { TagRecordV1 } from '../../src/data/version1/TagRecordV1';
 import { TagsMemoryPersistence } from '../../src/persistence/TagsMemoryPersistence';
 import { TagsController } from '../../src/logic/TagsController';
 
-let TAGS = [
-    { tag: 'tag1', count: 10, used: new Date() },
-    { tag: 'Tag 2', count: 3, used: new Date() },
-    { tag: 'TAG3', count: 4, used: new Date() }
-];
+let TAGS = new PartyTagsV1(
+    '1',
+    [
+        new TagRecordV1('tag1', 10),
+        new TagRecordV1('Tag 2', 3),
+        new TagRecordV1('TAG3', 4)
+    ]
+);
 
-suite('TagsController', ()=> {        
-    let db = new TagsMemoryPersistence();
-    db.configure(new ComponentConfig());
+suite('TagsController', ()=> {
+    let persistence: TagsMemoryPersistence;
+    let controller: TagsController;
 
-    let ctrl = new TagsController();
-    ctrl.configure(new ComponentConfig());
+    suiteSetup(() => {
+        persistence = new TagsMemoryPersistence();
+        controller = new TagsController();
 
-    let components = ComponentSet.fromComponents(db, ctrl);
+        let references: References = References.fromTuples(
+            new Descriptor('pip-services-tags', 'persistence', 'memory', 'default', '1.0'), persistence,
+            new Descriptor('pip-services-tags', 'controller', 'default', 'default', '1.0'), controller
+        );
 
-    suiteSetup((done) => {
-        LifeCycleManager.linkAndOpen(components, done);
-    });
-    
-    suiteTeardown((done) => {
-        LifeCycleManager.close(components, done);
+        controller.setReferences(references);
     });
     
     setup((done) => {
-        db.clearTestData(done);
+        persistence.clear(null, done);
     });
 
     test('Get and Set Tags', (done) => {
         async.series([
         // Update party tags
             (callback) => {
-                ctrl.setTags(
+                controller.setTags(
                     null,
-                    '1',
                     TAGS,
-                    (err, tags) => {
+                    (err, partyTags) => {
                         assert.isNull(err);
 
-                        assert.lengthOf(tags, 3);
+                        assert.lengthOf(partyTags.tags, 3);
 
                         callback();
                     }
@@ -55,13 +59,13 @@ suite('TagsController', ()=> {
             },
         // Read and check party tags
             (callback) => {
-                ctrl.getTags(
+                controller.getTags(
                     null,
                     '1',
-                    (err, tags) => {
+                    (err, partyTags) => {
                         assert.isNull(err);
 
-                        assert.lengthOf(tags, 3);
+                        assert.lengthOf(partyTags.tags, 3);
 
                         callback();
                     }
@@ -74,14 +78,14 @@ suite('TagsController', ()=> {
         async.series([
         // Record tags first time
             (callback) => {
-                ctrl.recordTags(
+                controller.recordTags(
                     null,
                     '1',
                     ['tag1', 'tag 2', 'tag_3'],
-                    (err, tags) => {
+                    (err, partyTags) => {
                         assert.isNull(err);
 
-                        assert.lengthOf(tags, 3);
+                        assert.lengthOf(partyTags.tags, 3);
 
                         callback(err);
                     }
@@ -89,14 +93,14 @@ suite('TagsController', ()=> {
             },
         // Record tags second time
             (callback) => {
-                ctrl.recordTags(
+                controller.recordTags(
                     null,
                     '1',
                     ['TAG2', 'tag3', 'tag__4'],
-                    (err, tags) => {
+                    (err, partyTags) => {
                         assert.isNull(err);
 
-                        assert.lengthOf(tags, 4);
+                        assert.lengthOf(partyTags.tags, 4);
 
                         callback(err);
                     }
@@ -104,17 +108,17 @@ suite('TagsController', ()=> {
             },
         // Get tags
             (callback) => {
-                ctrl.getTags(
+                controller.getTags(
                     null,
                     '1',
-                    (err, tags) => {
+                    (err, partyTags) => {
                         assert.isNull(err);
 
-                        assert.lengthOf(tags, 4);
+                        assert.lengthOf(partyTags.tags, 4);
 
                         callback(err);
                     });
-            },
+            }
         ], done);
 
     });

@@ -1,6 +1,12 @@
-import { IPersistence } from 'pip-services-runtime-node';
+import { IGetter } from 'pip-services-data-node';
+import { ISetter } from 'pip-services-data-node';
 
-export interface ITagsPersistence extends IPersistence {
-    getTags(correlationId: string, partyId: string, callback: any);
-    setTags(correlationId: string, partyId: string, tagRecords: any[], callback: any);
+import { PartyTagsV1 } from '../data/version1/PartyTagsV1';
+
+export interface ITagsPersistence extends IGetter<PartyTagsV1, string>, ISetter<PartyTagsV1> {
+    getOneById(correlationId: string, id: string,
+        callback: (err: any, item: PartyTagsV1) => void): void;
+
+    set(correlationId: string, item: PartyTagsV1,
+        callback: (err: any, item: PartyTagsV1) => void): void;
 }
