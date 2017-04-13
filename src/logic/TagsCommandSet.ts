@@ -1,3 +1,5 @@
+let _ = require('lodash');
+
 import { CommandSet } from 'pip-services-commons-node';
 import { ICommand } from 'pip-services-commons-node';
 import { Command } from 'pip-services-commons-node';
@@ -5,7 +7,12 @@ import { Schema } from 'pip-services-commons-node';
 import { Parameters } from 'pip-services-commons-node';
 import { FilterParams } from 'pip-services-commons-node';
 import { PagingParams } from 'pip-services-commons-node';
+import { ObjectSchema } from 'pip-services-commons-node';
+import { ArraySchema } from 'pip-services-commons-node';
+import { TypeCode } from 'pip-services-commons-node';
+import { DateTimeConverter } from 'pip-services-commons-node';
 
+import { PartyTagsV1Schema } from '../data/version1/PartyTagsV1Schema';
 import { ITagsBusinessLogic } from './ITagsBusinessLogic';
 
 export class TagsCommandSet extends CommandSet {
@@ -25,7 +32,8 @@ export class TagsCommandSet extends CommandSet {
 	private makeGetTagsCommand(): ICommand {
 		return new Command(
 			"get_tags",
-			null,
+			new ObjectSchema(true)
+				.withRequiredProperty('party_id', TypeCode.String),
             (correlationId: string, args: Parameters, callback: (err: any, result: any) => void) => {
                 let partyId = args.getAsNullableString("party_id");
                 this._logic.getTags(correlationId, partyId, callback);
@@ -36,9 +44,14 @@ export class TagsCommandSet extends CommandSet {
 	private makeSetTagsCommand(): ICommand {
 		return new Command(
 			"set_tags",
-			null,
+			new ObjectSchema(true)
+				.withRequiredProperty('party_tags', new PartyTagsV1Schema()),
             (correlationId: string, args: Parameters, callback: (err: any, result: any) => void) => {
                 let partyTags = args.get("party_tags");
+				partyTags.change_time = DateTimeConverter.toNullableDateTime(partyTags.change_time);
+				_.each(partyTags.tags, (t) => {
+					t.last_time = DateTimeConverter.toNullableDateTime(t.last_time);
+				});
                 this._logic.setTags(correlationId, partyTags, callback);
             }
 		);
@@ -47,7 +60,9 @@ export class TagsCommandSet extends CommandSet {
 	private makeRecordTagsCommand(): ICommand {
 		return new Command(
 			"record_tags",
-			null,
+			new ObjectSchema(true)
+				.withRequiredProperty('party_id', TypeCode.String)
+				.withRequiredProperty('tags', new ArraySchema(TypeCode.String)),
             (correlationId: string, args: Parameters, callback: (err: any, result: any) => void) => {
                 let partyId = args.getAsNullableString("party_id");
                 let tags = args.getAsArray("tags");

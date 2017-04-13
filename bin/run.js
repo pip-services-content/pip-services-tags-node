@@ -1,7 +1,7 @@
 let TagsProcess = require('../obj/src/container/TagsProcess').TagsProcess;
 
 try {
-    new TagsProcess().runWithArguments(process.argv);
+    new TagsProcess().run(process.argv);
 } catch (ex) {
     console.error(ex);
 }

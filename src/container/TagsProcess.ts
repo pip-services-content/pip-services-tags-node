@@ -5,15 +5,9 @@ import { TagsFactory } from '../build/TagsFactory';
 
 export class TagsProcess extends ProcessContainer {
 
-    protected initReferences(references: IReferences): void {
-        super.initReferences(references);
-
-        // Factory to statically resolve Tags components
-        references.put(TagsFactory.Descriptor, new TagsFactory());
-    }
-
-    public runWithArguments(args: string[]): void {
-        return this.runWithArgumentsOrConfigFile("tags", args, "./config/config.yaml");
+    public constructor() {
+        super("tags", "Search tags microservice");
+        this._factories.add(new TagsFactory);
     }
 
 }
