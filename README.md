@@ -23,6 +23,36 @@ This microservice has no dependencies on other microservices.
   - [HTTP Version 1](doc/Htt[ProtocolV1.md)
   - [Seneca Version 1](doc/SenecaProtocolV1.md)
 
+##  Contract
+
+Logical contract of the microservice is presented below. For physical implementation (HTTP/REST, Thrift, Seneca, Lambda, etc.),
+please, refer to documentation of the specific protocol.
+
+```typescript
+class PartyTagsV1 implements IStringIdentifiable {
+    public id: string;
+    public tags: TagRecordV1[];
+    public change_time: Date;
+}
+
+class TagRecordV1 {
+    public tag: string;
+    public count: number;
+    public last_time: Date;
+}
+
+interface ITagsV1 {
+    getTags(correlationId: string, partyId: string,
+        callback: (err: any, partyTags: PartyTagsV1) => void): void;
+
+    setTags(correlationId: string, partyTags: PartyTagsV1,
+        callback: (err: any, partyTags: PartyTagsV1) => void): void;
+    
+    recordTags(correlationId: string, partyId: string, tags: string[],
+        callback: (err: any, partyTags: PartyTagsV1) => void): void;
+}
+```
+
 ## Download
 
 Right now the only way to get the microservice is to check it out directly from github repository
