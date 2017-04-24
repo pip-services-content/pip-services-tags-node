@@ -16,10 +16,10 @@ import { TagsProcessor } from 'pip-services-commons-node';
 import { PartyTagsV1 } from '../data/version1/PartyTagsV1';
 import { TagRecordV1 } from '../data/version1/TagRecordV1';
 import { ITagsPersistence } from '../persistence/ITagsPersistence';
-import { ITagsBusinessLogic } from './ITagsBusinessLogic';
+import { ITagsController } from './ITagsController';
 import { TagsCommandSet } from './TagsCommandSet';
 
-export class TagsController implements IConfigurable, IReferenceable, ICommandable, ITagsBusinessLogic {
+export class TagsController implements IConfigurable, IReferenceable, ICommandable, ITagsController {
     private static _defaultConfig: ConfigParams = ConfigParams.fromTuples(
         'dependencies.persistence', 'pip-services-tags:persistence:*:*:1.0',
         'options.max_tags_count', 100

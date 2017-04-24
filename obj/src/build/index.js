@@ -1,5 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var TagsFactory_1 = require("./TagsFactory");
-exports.TagsFactory = TagsFactory_1.TagsFactory;
+var TagsServiceFactory_1 = require("./TagsServiceFactory");
+exports.TagsServiceFactory = TagsServiceFactory_1.TagsServiceFactory;
 //# sourceMappingURL=index.js.map

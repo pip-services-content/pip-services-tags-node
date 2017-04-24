@@ -1,6 +1,6 @@
 import { PartyTagsV1 } from '../data/version1/PartyTagsV1';
 
-export interface ITagsBusinessLogic {
+export interface ITagsController {
     getTags(correlationId: string, partyId: string,
         callback: (err: any, partyTags: PartyTagsV1) => void): void;
 

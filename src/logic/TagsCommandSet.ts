@@ -13,12 +13,12 @@ import { TypeCode } from 'pip-services-commons-node';
 import { DateTimeConverter } from 'pip-services-commons-node';
 
 import { PartyTagsV1Schema } from '../data/version1/PartyTagsV1Schema';
-import { ITagsBusinessLogic } from './ITagsBusinessLogic';
+import { ITagsController } from './ITagsController';
 
 export class TagsCommandSet extends CommandSet {
-    private _logic: ITagsBusinessLogic;
+    private _logic: ITagsController;
 
-    constructor(logic: ITagsBusinessLogic) {
+    constructor(logic: ITagsController) {
         super();
 
         this._logic = logic;

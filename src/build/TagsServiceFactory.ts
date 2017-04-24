@@ -8,7 +8,7 @@ import { TagsController } from '../logic/TagsController';
 import { TagsHttpServiceV1 } from '../services/version1/TagsHttpServiceV1';
 import { TagsSenecaServiceV1 } from '../services/version1/TagsSenecaServiceV1'; 
 
-export class TagsFactory extends Factory {
+export class TagsServiceFactory extends Factory {
 	public static Descriptor = new Descriptor("pip-services-tags", "factory", "default", "default", "1.0");
 	public static MemoryPersistenceDescriptor = new Descriptor("pip-services-tags", "persistence", "memory", "*", "1.0");
 	public static FilePersistenceDescriptor = new Descriptor("pip-services-tags", "persistence", "file", "*", "1.0");
@@ -19,12 +19,12 @@ export class TagsFactory extends Factory {
 	
 	constructor() {
 		super();
-		this.registerAsType(TagsFactory.MemoryPersistenceDescriptor, TagsMemoryPersistence);
-		this.registerAsType(TagsFactory.FilePersistenceDescriptor, TagsFilePersistence);
-		this.registerAsType(TagsFactory.MongoDbPersistenceDescriptor, TagsMongoDbPersistence);
-		this.registerAsType(TagsFactory.ControllerDescriptor, TagsController);
-		this.registerAsType(TagsFactory.SenecaServiceDescriptor, TagsSenecaServiceV1);
-		this.registerAsType(TagsFactory.HttpServiceDescriptor, TagsHttpServiceV1);
+		this.registerAsType(TagsServiceFactory.MemoryPersistenceDescriptor, TagsMemoryPersistence);
+		this.registerAsType(TagsServiceFactory.FilePersistenceDescriptor, TagsFilePersistence);
+		this.registerAsType(TagsServiceFactory.MongoDbPersistenceDescriptor, TagsMongoDbPersistence);
+		this.registerAsType(TagsServiceFactory.ControllerDescriptor, TagsController);
+		this.registerAsType(TagsServiceFactory.SenecaServiceDescriptor, TagsSenecaServiceV1);
+		this.registerAsType(TagsServiceFactory.HttpServiceDescriptor, TagsHttpServiceV1);
 	}
 	
 }

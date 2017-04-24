@@ -1,1 +1,1 @@
-export { TagsFactory } from './TagsFactory';
+export { TagsServiceFactory } from './TagsServiceFactory';

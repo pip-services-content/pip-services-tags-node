@@ -5,8 +5,8 @@ import { IReferenceable } from 'pip-services-commons-node';
 import { ICommandable } from 'pip-services-commons-node';
 import { CommandSet } from 'pip-services-commons-node';
 import { PartyTagsV1 } from '../data/version1/PartyTagsV1';
-import { ITagsBusinessLogic } from './ITagsBusinessLogic';
-export declare class TagsController implements IConfigurable, IReferenceable, ICommandable, ITagsBusinessLogic {
+import { ITagsController } from './ITagsController';
+export declare class TagsController implements IConfigurable, IReferenceable, ICommandable, ITagsController {
     private static _defaultConfig;
     private _maxTagCount;
     private _dependencyResolver;
