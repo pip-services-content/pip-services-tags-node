@@ -3,7 +3,7 @@ let _ = require('lodash');
 import { FilterParams } from 'pip-services-commons-node';
 import { PagingParams } from 'pip-services-commons-node';
 import { DataPage } from 'pip-services-commons-node';
-import { IdentifiableMongoDbPersistence } from 'pip-services-data-node';
+import { IdentifiableMongoDbPersistence } from 'pip-services-mongodb-node';
 
 import { PartyTagsV1 } from '../data/version1/PartyTagsV1';
 import { ITagsPersistence } from './ITagsPersistence';

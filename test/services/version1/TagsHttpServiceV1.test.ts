@@ -66,7 +66,7 @@ suite('TagsHttpServiceV1', ()=> {
         async.series([
         // Set party tags
             (callback) => {
-                rest.post('/tags/set_tags',
+                rest.post('/v1/tags/set_tags',
                     {
                         party_tags: TAGS
                     },
@@ -81,7 +81,7 @@ suite('TagsHttpServiceV1', ()=> {
             },
         // Read and check party tags
             (callback) => {
-                rest.post('/tags/get_tags',
+                rest.post('/v1/tags/get_tags',
                     {
                         party_id: '1'
                     },
@@ -101,7 +101,7 @@ suite('TagsHttpServiceV1', ()=> {
         async.series([
         // Record tags first time
             (callback) => {
-                rest.post('/tags/record_tags',
+                rest.post('/v1/tags/record_tags',
                     { 
                         party_id: '1',
                         tags: ['tag1', 'tag 2', 'tag_3'] 
@@ -117,7 +117,7 @@ suite('TagsHttpServiceV1', ()=> {
             },
         // Record tags second time
             (callback) => {
-                rest.post('/tags/record_tags',
+                rest.post('/v1/tags/record_tags',
                     { 
                         party_id: '1',
                         tags: ['TAG2', 'tag3', 'tag__4'] 
@@ -133,7 +133,7 @@ suite('TagsHttpServiceV1', ()=> {
             },
         // Get tags
             (callback) => {
-                rest.post('/tags/get_tags',
+                rest.post('/v1/tags/get_tags',
                     {
                         party_id: '1'
                     },
