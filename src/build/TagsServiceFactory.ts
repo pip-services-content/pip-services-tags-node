@@ -1,12 +1,11 @@
-import { Factory } from 'pip-services-components-node';
-import { Descriptor } from 'pip-services-commons-node';
+import { Factory } from 'pip-services3-components-node';
+import { Descriptor } from 'pip-services3-commons-node';
 
 import { TagsMongoDbPersistence } from '../persistence/TagsMongoDbPersistence';
 import { TagsFilePersistence } from '../persistence/TagsFilePersistence';
 import { TagsMemoryPersistence } from '../persistence/TagsMemoryPersistence';
 import { TagsController } from '../logic/TagsController';
 import { TagsHttpServiceV1 } from '../services/version1/TagsHttpServiceV1';
-import { TagsSenecaServiceV1 } from '../services/version1/TagsSenecaServiceV1'; 
 
 export class TagsServiceFactory extends Factory {
 	public static Descriptor = new Descriptor("pip-services-tags", "factory", "default", "default", "1.0");
@@ -14,7 +13,6 @@ export class TagsServiceFactory extends Factory {
 	public static FilePersistenceDescriptor = new Descriptor("pip-services-tags", "persistence", "file", "*", "1.0");
 	public static MongoDbPersistenceDescriptor = new Descriptor("pip-services-tags", "persistence", "mongodb", "*", "1.0");
 	public static ControllerDescriptor = new Descriptor("pip-services-tags", "controller", "default", "*", "1.0");
-	public static SenecaServiceDescriptor = new Descriptor("pip-services-tags", "service", "seneca", "*", "1.0");
 	public static HttpServiceDescriptor = new Descriptor("pip-services-tags", "service", "http", "*", "1.0");
 	
 	constructor() {
@@ -23,7 +21,6 @@ export class TagsServiceFactory extends Factory {
 		this.registerAsType(TagsServiceFactory.FilePersistenceDescriptor, TagsFilePersistence);
 		this.registerAsType(TagsServiceFactory.MongoDbPersistenceDescriptor, TagsMongoDbPersistence);
 		this.registerAsType(TagsServiceFactory.ControllerDescriptor, TagsController);
-		this.registerAsType(TagsServiceFactory.SenecaServiceDescriptor, TagsSenecaServiceV1);
 		this.registerAsType(TagsServiceFactory.HttpServiceDescriptor, TagsHttpServiceV1);
 	}
 	

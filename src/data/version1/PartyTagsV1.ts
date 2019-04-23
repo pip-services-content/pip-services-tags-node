@@ -1,5 +1,5 @@
-import { IStringIdentifiable } from 'pip-services-commons-node';
-import { IChangeable } from 'pip-services-commons-node';
+import { IStringIdentifiable } from 'pip-services3-commons-node';
+import { IChangeable } from 'pip-services3-commons-node';
 
 import { TagRecordV1 } from './TagRecordV1';
 

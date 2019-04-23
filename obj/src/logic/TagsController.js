@@ -1,16 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 let _ = require('lodash');
-const pip_services_commons_node_1 = require("pip-services-commons-node");
-const pip_services_commons_node_2 = require("pip-services-commons-node");
-const pip_services_commons_node_3 = require("pip-services-commons-node");
+const pip_services3_commons_node_1 = require("pip-services3-commons-node");
+const pip_services3_commons_node_2 = require("pip-services3-commons-node");
+const pip_services3_commons_node_3 = require("pip-services3-commons-node");
 const PartyTagsV1_1 = require("../data/version1/PartyTagsV1");
 const TagRecordV1_1 = require("../data/version1/TagRecordV1");
 const TagsCommandSet_1 = require("./TagsCommandSet");
 class TagsController {
     constructor() {
         this._maxTagCount = 100;
-        this._dependencyResolver = new pip_services_commons_node_2.DependencyResolver(TagsController._defaultConfig);
+        this._dependencyResolver = new pip_services3_commons_node_2.DependencyResolver(TagsController._defaultConfig);
     }
     configure(config) {
         this._dependencyResolver.configure(config);
@@ -40,7 +40,7 @@ class TagsController {
         // Add or update tags, increment their count and update last used time
         _.each(tags, (tag) => {
             let tagRecord = _.find(partyTags.tags, (r) => {
-                return pip_services_commons_node_3.TagsProcessor.equalTags(r.tag, tag);
+                return pip_services3_commons_node_3.TagsProcessor.equalTags(r.tag, tag);
             });
             if (tagRecord != null) {
                 tagRecord.tag = tag;
@@ -63,7 +63,7 @@ class TagsController {
         return partyTags;
     }
     recordTags(correlationId, partyId, tags, callback) {
-        tags = pip_services_commons_node_3.TagsProcessor.normalizeTags(tags || []);
+        tags = pip_services3_commons_node_3.TagsProcessor.normalizeTags(tags || []);
         // If there are no tags then skip processing
         if (tags.length == 0) {
             if (callback)
@@ -82,6 +82,6 @@ class TagsController {
         });
     }
 }
-TagsController._defaultConfig = pip_services_commons_node_1.ConfigParams.fromTuples('dependencies.persistence', 'pip-services-tags:persistence:*:*:1.0', 'options.max_tags_count', 100);
+TagsController._defaultConfig = pip_services3_commons_node_1.ConfigParams.fromTuples('dependencies.persistence', 'pip-services-tags:persistence:*:*:1.0', 'options.max_tags_count', 100);
 exports.TagsController = TagsController;
 //# sourceMappingURL=TagsController.js.map

@@ -1,5 +1,5 @@
-import { IGetter } from 'pip-services-data-node';
-import { ISetter } from 'pip-services-data-node';
+import { IGetter } from 'pip-services3-data-node';
+import { ISetter } from 'pip-services3-data-node';
 
 import { PartyTagsV1 } from '../data/version1/PartyTagsV1';
 
