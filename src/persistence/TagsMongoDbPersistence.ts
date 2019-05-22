@@ -3,18 +3,18 @@ let _ = require('lodash');
 import { FilterParams } from 'pip-services3-commons-node';
 import { PagingParams } from 'pip-services3-commons-node';
 import { DataPage } from 'pip-services3-commons-node';
-import { IdentifiableMongoDbPersistence } from 'pip-services3-mongodb-node';
+import { IdentifiableMongoosePersistence } from 'pip-services3-mongoose-node';
 
 import { PartyTagsV1 } from '../data/version1/PartyTagsV1';
 import { ITagsPersistence } from './ITagsPersistence';
-import {PartyTagsMongoDbSchema } from './PartyTagsMongoDbSchema';
+import {PartyTagsMongooseSchema } from './PartyTagsMongooseSchema';
 
 export class TagsMongoDbPersistence 
-    extends IdentifiableMongoDbPersistence<PartyTagsV1, string> 
+    extends IdentifiableMongoosePersistence<PartyTagsV1, string> 
     implements ITagsPersistence {
 
     constructor() {
-        super('tags', PartyTagsMongoDbSchema());
+        super('tags', PartyTagsMongooseSchema());
     }
 
     public set(correlationId: string, item: PartyTagsV1,
