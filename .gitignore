@@ -1,6 +1,7 @@
 /node_modules
 /npm-debug.log
 /.idea
-/data/tags.test.json
-/data/tags.json
+/data/ImageSets.test.json
+/data/ImageSets.json
 /obj/test
+/docker/id_rsa*

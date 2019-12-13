@@ -1,11 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 let _ = require('lodash');
-const pip_services3_mongoose_node_1 = require("pip-services3-mongoose-node");
-const PartyTagsMongooseSchema_1 = require("./PartyTagsMongooseSchema");
-class TagsMongoDbPersistence extends pip_services3_mongoose_node_1.IdentifiableMongoosePersistence {
+const pip_services3_mongodb_node_1 = require("pip-services3-mongodb-node");
+class TagsMongoDbPersistence extends pip_services3_mongodb_node_1.IdentifiableMongoDbPersistence {
     constructor() {
-        super('tags', PartyTagsMongooseSchema_1.PartyTagsMongooseSchema());
+        super('tags');
     }
     set(correlationId, item, callback) {
         if (item == null) {

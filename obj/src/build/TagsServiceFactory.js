@@ -17,11 +17,11 @@ class TagsServiceFactory extends pip_services3_components_node_1.Factory {
         this.registerAsType(TagsServiceFactory.HttpServiceDescriptor, TagsHttpServiceV1_1.TagsHttpServiceV1);
     }
 }
+exports.TagsServiceFactory = TagsServiceFactory;
 TagsServiceFactory.Descriptor = new pip_services3_commons_node_1.Descriptor("pip-services-tags", "factory", "default", "default", "1.0");
 TagsServiceFactory.MemoryPersistenceDescriptor = new pip_services3_commons_node_1.Descriptor("pip-services-tags", "persistence", "memory", "*", "1.0");
 TagsServiceFactory.FilePersistenceDescriptor = new pip_services3_commons_node_1.Descriptor("pip-services-tags", "persistence", "file", "*", "1.0");
 TagsServiceFactory.MongoDbPersistenceDescriptor = new pip_services3_commons_node_1.Descriptor("pip-services-tags", "persistence", "mongodb", "*", "1.0");
 TagsServiceFactory.ControllerDescriptor = new pip_services3_commons_node_1.Descriptor("pip-services-tags", "controller", "default", "*", "1.0");
 TagsServiceFactory.HttpServiceDescriptor = new pip_services3_commons_node_1.Descriptor("pip-services-tags", "service", "http", "*", "1.0");
-exports.TagsServiceFactory = TagsServiceFactory;
 //# sourceMappingURL=TagsServiceFactory.js.map

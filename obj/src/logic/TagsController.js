@@ -82,6 +82,6 @@ class TagsController {
         });
     }
 }
-TagsController._defaultConfig = pip_services3_commons_node_1.ConfigParams.fromTuples('dependencies.persistence', 'pip-services-tags:persistence:*:*:1.0', 'options.max_tags_count', 100);
 exports.TagsController = TagsController;
+TagsController._defaultConfig = pip_services3_commons_node_1.ConfigParams.fromTuples('dependencies.persistence', 'pip-services-tags:persistence:*:*:1.0', 'options.max_tags_count', 100);
 //# sourceMappingURL=TagsController.js.map
